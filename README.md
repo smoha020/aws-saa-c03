@@ -5151,6 +5151,9 @@ https://docs.aws.amazon.com/apigateway/latest/api/CommonErrors.html
 > - *AWS Managed Microsoft AD - An actual Microsoft AD DS Implementation*
 > - *AD Connector which proxies requests back to an on-premises directory.*
 
+### When to Use AWS Directory Service vs IAM Identity Center:
+- Use AWS Directory Service when you need full integration with Microsoft Active Directory (either in the cloud or on-premises), want to domain-join EC2 instances, or need AD-specific features like Group Policy.
+- Use IAM Identity Center for simpler use cases like providing single sign-on (SSO) to AWS resources and integrating with third-party identity providers (like Okta or Azure AD), where you don't need traditional AD features.
 ### What’s a Directory?
 
 - Stores **objects** (e.g. Users, Groups, Computers, Servers, File Shares) with a **structure** (domain/tree)
