@@ -916,6 +916,7 @@ arn:aws:s3:::catgifs/* # Objects in bucket
 ![Untitled](img/Untitled%207.png)
 
 - SCPs are **account permissions boundaries**
+- <img width="490" alt="image" src="https://github.com/user-attachments/assets/886ea530-48ae-4ae3-a2d4-e1fd27845e67" />
 - They limit what the account (including account root user) can do
 - SCPs can e.g. limit the size of an EC2 instance within a specific region
 - **SCPs don’t grant any permissions!**
