@@ -891,6 +891,7 @@ arn:aws:s3:::catgifs/* # Objects in bucket
 > 
 
 ![Untitled](img/Untitled%206.png)
+<img width="523" alt="image" src="https://github.com/user-attachments/assets/ddde331a-39ca-46ec-8023-397a2a5a9e3a" />
 
 - Use a standard AWS account to create a AWS organization
     - This account will be the **management account** or **master account - can only be one**
@@ -925,6 +926,7 @@ arn:aws:s3:::catgifs/* # Objects in bucket
         - Explicit say which services are allowed
         - More overhead, may block access to services you don’t intend to block
 - Best practice is deny list architecture
+<img width="528" alt="image" src="https://github.com/user-attachments/assets/ed3ee4f0-ea64-42ec-a65a-2533f9a92c89" />
 
 ![Untitled](img/Untitled%208.png)
 
