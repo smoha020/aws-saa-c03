@@ -928,6 +928,11 @@ arn:aws:s3:::catgifs/* # Objects in bucket
 
 ![Untitled](img/Untitled%208.png)
 
+## AWS IAM Identity Center 
+<img width="512" alt="image" src="https://github.com/user-attachments/assets/d23a6438-e646-4c40-a195-7588f991925e" />
+<img width="520" alt="image" src="https://github.com/user-attachments/assets/bbc52268-0be8-4d95-af3a-cbbd02ce5c32" />
+
+
 ## CloudWatch Logs
 
 > *CloudWatch Logs is a service which can accept logging data, store it and monitor it.
