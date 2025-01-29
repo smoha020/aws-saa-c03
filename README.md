@@ -935,8 +935,10 @@ arn:aws:s3:::catgifs/* # Objects in bucket
 ![Untitled](img/Untitled%208.png)
 
 ## AWS IAM Identity Center 
-<img width="512" alt="image" src="https://github.com/user-attachments/assets/d23a6438-e646-4c40-a195-7588f991925e" />
-<img width="520" alt="image" src="https://github.com/user-attachments/assets/bbc52268-0be8-4d95-af3a-cbbd02ce5c32" />
+- SSO using Azure
+	- https://www.youtube.com/watch?v=x7TCs9HxRFg&list=PLR5Btp19bh0-V25GejKMxhA9FAGwHq7pw&index=3
+- <img width="512" alt="image" src="https://github.com/user-attachments/assets/d23a6438-e646-4c40-a195-7588f991925e" />
+- <img width="520" alt="image" src="https://github.com/user-attachments/assets/bbc52268-0be8-4d95-af3a-cbbd02ce5c32" />
 
 
 ## CloudWatch Logs
