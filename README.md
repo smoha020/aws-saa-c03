@@ -843,6 +843,7 @@ arn:aws:s3:::catgifs/* # Objects in bucket
         - sts:AssumeRole
     - Permissions policy define what they have access to
     - When they expire the role has to be assumed again to regain access
+    - If you want to access a resource in a different AWS account you can use an IAM Role or a resource-based policy
     - <img width="464" alt="image" src="https://github.com/user-attachments/assets/a55f8c6e-ff56-4233-a44d-ca106fe66d95" />
 
 ### ❓When to use IAM Roles
