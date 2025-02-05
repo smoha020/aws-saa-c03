@@ -1268,8 +1268,9 @@ Keys never leave KMS - Provides FIPS 140-2 (L2)**
 	| Client-Side | You | You |  |
         | SSE-C | You | S3 |  |
         | SSE-S3 | S3 | S3 |  |
-        | SSE-KMS | S3 & KMS | S3 | Rotation Control
-        Role Separation |
+        | SSE-KMS | S3 & KMS | S3 | Rotation Control |
+
+      Role Separation |
         
         ![Untitled](img/Untitled%2016.png)
         
