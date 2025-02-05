@@ -1264,8 +1264,8 @@ Keys never leave KMS - Provides FIPS 140-2 (L2)**
         ![Untitled](img/Untitled%2015.png)
         
         | Method | Key Management | Encryption Processing | Extras |
-        |  |  |  |  |
-        | Client-Side | You | You |  |
+	| ------ | -------------- | --------------------- | ------ |
+	| Client-Side | You | You |  |
         | SSE-C | You | S3 |  |
         | SSE-S3 | S3 | S3 |  |
         | SSE-KMS | S3 & KMS | S3 | Rotation Control
