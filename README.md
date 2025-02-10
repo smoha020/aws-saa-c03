@@ -3901,8 +3901,7 @@ Equally distribute load to instances across AZs
     - Always better than simple - adjust better
     - AWS recommends
 - Target tracking
-    - Define ideal value, e.g. 50% CPU usage
-    - Add/remove to stay at ideal value
+    -  You specify a certain target eg ‘make sure cpu utilization is at 50%’. ASG will make sure it adds and removes instances such that the average is always at 50%. This type of scaling uses 4 metrics: cpu, avg network in, network out, alb request count
 - Scaling based on **SQS - ApprocimateNumberOfMessagesVisible**
 
 ### ASG - Simple Scaling
