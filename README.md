@@ -522,6 +522,15 @@ Used through other AWS services for health and performance monitoring, log manag
 - Dimensions separate datapoints for different **things** or **perspectives** within the same metric
 - Use dimensions to look at the metric for a specific InstanceId
 
+### Example: How dimensions, namespaces, and metrics work together
+- Imagine you want to monitor the CPU utilization of a specific EC2 instance:
+	- Namespace: AWS/EC2 (groups all EC2-related metrics together)
+	- Metric: CPUUtilization
+	- Dimensions:
+	- InstanceId: i-1234567890abcdef0
+	- InstanceType: t2.micro
+- This combination allows you to track the CPU utilization specifically for the EC2 instance with ID i-1234567890abcdef0, which is a t2.micro instance type.
+
 ### Alarm
 
 - Linked to a specific metric
@@ -847,30 +856,11 @@ arn:aws:s3:::catgifs/* # Objects in bucket
     - <img width="464" alt="image" src="https://github.com/user-attachments/assets/a55f8c6e-ff56-4233-a44d-ca106fe66d95" />
 
 ### ❓When to use IAM Roles
-
-- Most common use case is for other AWS services
-- E.g. AWS Lambda
-    - No permissions by default
-    - **Lambda Execution Role**
-    - Runtime environment assumes the role.
-    - Better to use a role than to hardcode access keys to the Lambda function
-- Emergency or unusual situations
-- E.g. team with read-only access:
-    - 99% read-only access is OK
-    - “Break glass for key”
-    - User of team can assume an emergency role to perform a certain write action
-- A corporation with > 5000 ids
-    - **ID federation**
-    - Can allow an organization to use previous existing accounts for SSO (Active Directory)
-    - AD users are allowed to assume a role to gain access to e.g. a bucket
-- App with millions of users
-    - **Web Identity Federation**
-    - Users might need to interact with a DynamoDB
-    - Users are allowed to assume a role to interact with the db
-    - No AWS credentials on the app
-    - Uses existing customer logins (twitter, fb, google)
-    - Scales to large number of accounts
-- Cross AWS accounts
+- Federated User Access: Scenario: Granting temporary access to users who authenticate through an external identity provider. Example: Allowing employees to access AWS resources using their corporate credentials. Steps: a. Set up federation between your identity provider and AWS. b. Create an IAM role with the necessary permissions. c. Configure the identity provider to map users to the appropriate IAM role. d. Users authenticate through the identity provider and receive temporary AWS credentials.
+- EC2 Instance Access to AWS Resources: Scenario: Granting EC2 instances permission to access other AWS services. Example: Allowing an EC2 instance to read and write to an S3 bucket. Steps: a. Create an IAM role with the required S3 permissions. b. Attach the role to the EC2 instance during launch or to a running instance. c. The EC2 instance can now access S3 using the role's credentials.
+- Cross-Account Access: Scenario: Granting access to resources in one AWS account to users in another account. Example: Allowing developers in a development account to deploy to a production account. Steps: a. In the production account, create an IAM role with necessary permissions. b. Set up a trust relationship allowing the development account to assume the role. c. In the development account, grant permissions to specific users to assume the role. d. Users in the development account can now switch to the production role when needed.
+- AWS Service Access: Scenario: Granting an AWS service permission to perform actions on your behalf. Example: Allowing AWS Lambda to write logs to CloudWatch Logs. Steps: a. Create an IAM role with permissions to write to CloudWatch Logs. b. Configure the Lambda function to use this role. c. Lambda can now write logs using the role's permissions.
+- Temporary Elevated Access: Scenario: Granting temporary elevated permissions for specific tasks. Example: Providing an auditor temporary access to review CloudTrail logs. Steps: a. Create an IAM role with the necessary permissions to access CloudTrail logs. b. Set up a trust relationship with specific IAM users who can assume this role. c. Configure the role with a time limit using a condition in the trust policy. d. Authorized users can assume the role for the specified duration.
 
 ## Service-linked Roles & PassRole
 
@@ -985,6 +975,18 @@ CloudWatch Logs is a public service and can also be utilized in an on-premises e
     - Only these logs global
 - **NOT REALTIME** - There is a delay
     - Typical 15 minutes ❗
+### CloudTrail vs CloudWatch
+- Key Differences:
+	- Purpose: CloudWatch focuses on performance monitoring and operational health.
+CloudTrail is centered on auditing API calls for security and compliance.
+	- Data Type: CloudWatch deals with metrics, logs, and events related to resource performance.
+CloudTrail logs API activity and account actions.
+	- Real-time vs. Historical: CloudWatch provides real-time monitoring and can trigger immediate actions.
+CloudTrail offers a historical record of account activity.
+	- Use Cases: Use CloudWatch for performance monitoring, troubleshooting, and automated responses to operational issues.
+Use CloudTrail for security analysis, resource change tracking, and compliance auditing.
+	- Granularity: CloudWatch typically deals with aggregated data over time.
+CloudTrail provides detailed information about each individual API call.
 
 ## AWS Control Tower
 
