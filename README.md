@@ -3508,10 +3508,32 @@ Writes to replica after primary write is complete. ***Can*** be accessed for rea
 - Storage which is freed up can be re-used
 - Replicas can be added and removed without requiring storage provisioning
 - Multiple endpoints
-    - Cluster endpoint
-    - Reader endpoint
-        - Load balance across replicas
-    - Custom endpoints
+    - 1. **Cluster Endpoint**
+	- **Description**: The **Cluster Endpoint** refers to the primary endpoint of an Aurora DB cluster. It points to the primary instance in the cluster, which handles both read and write requests. All applications that need to connect to the database for read-write operations should use the cluster endpoint.
+	- **Use Case**: 
+	  - If you have a web application that requires both read and write capabilities (e.g., inserting new records, updating data), you would connect to the **Cluster Endpoint**. 
+	  - **Example**: A content management system (CMS) where users submit content (write) and query content (read). The CMS backend connects to the Cluster Endpoint to handle both writing new content and fetching existing content.
+    - 2. **Reader Endpoint**
+	- **Description**: The **Reader Endpoint** is a special endpoint that provides load balancing across all read replicas in the Aurora cluster. It is used to distribute read requests across multiple read-only replicas to improve scalability and performance, particularly in read-heavy applications.
+	- **Use Case**: 
+	  - For applications where most of the traffic is read-intensive, the **Reader Endpoint** can be used to offload read operations from the primary instance.
+	  - **Example**: An e-commerce website where users frequently view product details, search for items, and check inventory. These read-heavy operations can be directed to the Reader Endpoint, allowing the primary database to focus on write operations like processing orders.
+    - 3. **Custom Endpoint**
+	- **Description**: A **Custom Endpoint** is a user-defined endpoint that can be configured to target a specific set of instances in an Aurora DB cluster. Custom endpoints are used for specialized use cases, where you want to route traffic to certain instances, such as read replicas, based on specific criteria.
+	- **Use Case**: 
+	  - When you need to target specific instances for certain workloads, like a reporting or analytics application that requires data from a specific read replica.
+	  - **Example**: A reporting application that needs to query a particular replica in an Aurora cluster (perhaps for performance or data consistency reasons). You could create a **Custom Endpoint** to point to that replica, ensuring that the reporting tool connects directly to it instead of using the default Reader Endpoint.
+    - 4. **Instance Endpoint**
+	- **Description**: The **Instance Endpoint** refers to the endpoint of a specific DB instance in the Aurora cluster, whether it’s the primary instance or a read replica. This endpoint connects to a single instance in the cluster, and it is used when you want to interact with a particular instance rather than using a cluster-wide or reader endpoint.
+	- **Use Case**: 
+	  - If you want to interact with a particular instance for specific database management tasks or for debugging, you can connect to the **Instance Endpoint** of that instance.
+	  - **Example**: During troubleshooting or debugging, a database administrator (DBA) may connect directly to a specific instance of the Aurora cluster using an **Instance Endpoint** to diagnose issues or perform maintenance tasks on that particular instance.
+    - Summary of Use Cases:
+	- **Cluster Endpoint**: Use for read-write operations on the primary database instance.
+	- **Reader Endpoint**: Use for read-only operations and load balancing across read replicas.
+	- **Custom Endpoint**: Use when you need to direct traffic to specific instances in the cluster for special use cases.
+	- **Instance Endpoint**: Use for direct connections to a specific instance (primary or replica), typically for administrative tasks or debugging.
+
 
 ### Cost
 
