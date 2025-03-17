@@ -6229,6 +6229,105 @@ Calculate **RCU per item** - ROUND UP! ITEM.SIZE / 4KB = 1
 
 ![Untitled](img/Untitled%20236.png)
 
+
+## Questions
+
+### 1. **Query vs Scan in DynamoDB**
+
+Both **Query** and **Scan** are operations used to retrieve data from a DynamoDB table, but they work very differently:
+
+#### **Query**:
+- **How it works**: The **Query** operation allows you to search for items in a table based on specific criteria, particularly the **partition key** (and optionally the **sort key**). It is **more efficient** because it uses **indexes** to quickly locate the items. You can specify a range for the sort key or filter results using additional conditions.
+- **Usage**: Use the Query operation when you know the **partition key** value (and optionally the sort key). You can also use additional filters for better precision in results.
+- **Performance**: Querying is fast and efficient because it leverages the primary key or secondary indexes to locate the data.
+- **Example**: If you have a table where each item represents a **user** and the **userId** is the partition key, you could query all items with a specific **userId**.
+  
+  ```js
+  // Example of a query operation in DynamoDB
+  query({
+    TableName: 'Users',
+    KeyConditionExpression: 'userId = :userId',
+    ExpressionAttributeValues: {
+      ':userId': 'user123'
+    }
+  });
+  ```
+
+#### **Scan**:
+- **How it works**: The **Scan** operation examines every item in a table, looking for matching criteria. It does **not use indexes** and instead **scans the entire table**. This makes it less efficient, especially for large tables.
+- **Usage**: Use Scan when you need to examine the entire table or when you cannot easily use a Query due to unknown or dynamic partition keys.
+- **Performance**: Scan is less efficient because it has to examine every item in the table, regardless of its partition key. It’s generally slower and consumes more read capacity.
+- **Example**: To retrieve all items in a table (without specifying any partition key), you would use the Scan operation.
+
+  ```js
+  // Example of a scan operation in DynamoDB
+  scan({
+    TableName: 'Users',
+    FilterExpression: 'age > :minAge',
+    ExpressionAttributeValues: {
+      ':minAge': 18
+    }
+  });
+  ```
+
+### 2. **WCU and RCPU**
+
+DynamoDB uses **Provisioned** or **On-demand** capacity modes, and understanding **WCU** and **RCU** is crucial to managing costs and performance.
+
+#### **WCU** (Write Capacity Unit):
+- **Definition**: A WCU represents the **capacity to perform one write operation per second** for items up to **1 KB in size**. If you want to write an item larger than 1 KB, it will consume more WCUs.
+- **Usage**: Each time you write an item (PUT, UPDATE, DELETE), it consumes **WCU**.
+- **Provisioned Mode**: If you're using provisioned mode, you allocate a certain number of WCUs for your table, and DynamoDB guarantees that number of writes per second.
+
+#### **RCU** (Read Capacity Unit):
+- **Definition**: An RCPU represents the **capacity to perform one strongly consistent read operation per second** for items up to **4 KB in size**.
+  - For **eventual consistency** (the default read mode), a single RCPU can perform **2 reads per second** for 4 KB items.
+- **Usage**: Each time you perform a read (GET, QUERY), it consumes **RCU**.
+- **Provisioned Mode**: If you're using provisioned mode, you allocate a certain number of RCUs for your table, and DynamoDB guarantees that number of reads per second.
+
+### 3. **DynamoDB Indexes: GSI vs LSI**
+
+DynamoDB supports indexes to enable more efficient querying. Two main types of indexes are **Global Secondary Indexes (GSI)** and **Local Secondary Indexes (LSI)**.
+
+#### **Global Secondary Index (GSI)**:
+- **Definition**: A **GSI** allows you to create an index on **any attribute** (other than the primary key) in your DynamoDB table. The GSI can have a different partition key and/or sort key from the main table.
+- **Usage**: GSIs are useful when you want to perform queries on attributes that aren't part of the primary key.
+- **Example**: If your table's primary key is `(userId, postId)` and you want to query posts based on `createdDate`, you can create a GSI where `createdDate` is the partition key.
+
+#### **Local Secondary Index (LSI)**:
+- **Definition**: An **LSI** is an index on the same partition key as the main table but with a **different sort key**. LSIs can only be created when the table is first created (can't be added later), and you can only have **5 LSIs** per table.
+- **Usage**: LSIs are useful when you want to perform queries based on a different sort key for the same partition key.
+- **Example**: If your table has a partition key `userId` and a sort key `postId`, you could create an LSI on the `userId` partition key with a different sort key, like `createdDate`, to query posts for a user by creation date.
+
+### 4. **DynamoDB Streams and Triggers**
+
+DynamoDB Streams allow you to capture and react to changes in your DynamoDB tables. These changes can be used for a variety of purposes, such as triggering Lambda functions or maintaining materialized views.
+
+#### **View Types in DynamoDB Streams**:
+There are **4 types of views** for DynamoDB Streams that define the content of the change records in the stream:
+
+1. **KEYS_ONLY**: Only the primary key attributes of the modified item are included in the stream record.
+   - Use case: If you only care about which items were modified (e.g., tracking which rows were changed).
+
+2. **NEW_IMAGE**: The entire item, as it appears **after** the modification, is included in the stream record.
+   - Use case: If you need to see the full state of the item after the change.
+
+3. **OLD_IMAGE**: The entire item, as it appeared **before** the modification, is included in the stream record.
+   - Use case: If you need to see the state of the item before the change (useful for undo operations or auditing).
+
+4. **NEW_AND_OLD_IMAGES**: Both the **new image** (after the modification) and the **old image** (before the modification) are included in the stream record.
+   - Use case: If you need both the state of the item before and after the change (e.g., for full auditing or data migration).
+
+### Summary of Key Points:
+
+- **Query vs Scan**: Query is more efficient as it uses keys and indexes, whereas Scan examines the entire table.
+- **WCU & RCPU**: Write Capacity Units (WCU) and Read Capacity Units (RCU) measure throughput for writes and reads respectively.
+- **Indexes**: **GSI** allows indexing on any attribute, whereas **LSI** only allows indexing on a different sort key for the same partition key.
+- **DynamoDB Streams & Triggers**: Streams capture changes to DynamoDB tables, and **view types** (KEYS_ONLY, NEW_IMAGE, OLD_IMAGE, NEW_AND_OLD_IMAGES) control the content captured in the stream.
+
+By understanding these concepts, you can optimize the performance and cost of your DynamoDB operations, while leveraging advanced features like Streams and Triggers for event-driven applications.
+
+
 ## Global Tables
 
 > *DynamoDB Global Tables provides multi-master global replication of DynamoDB tables which can be used for performance, HA or DR/BC reasons.*
