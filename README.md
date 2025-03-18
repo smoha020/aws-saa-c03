@@ -3338,6 +3338,57 @@ Reasons to NOT host DB on EC2:
 
 ![Untitled](img/Untitled%2093.png)
 
+## Synchronous vs Asynchronous Replicaion
+
+The difference between **synchronous** and **asynchronous** replication in the context of **Amazon RDS (Relational Database Service)** lies in how data is propagated across the primary and replica databases. These terms describe how changes made to the primary database (master) are replicated to the read replicas.
+
+### 1. **Synchronous Replication**:
+   - **Definition**: In **synchronous replication**, the changes made to the primary database are **written to both the primary database and the replica** at the same time. The system waits for an acknowledgment from the replica before confirming the transaction as successful.
+   - **How it works**: When a write operation (insert, update, delete) is performed on the primary database, the data is immediately replicated to the replica(s). The primary database will only commit the transaction once the replica confirms that the data has been written successfully.
+   - **Pros**:
+     - **Strong consistency**: The data on the replica is guaranteed to be the same as the primary database, which means the replicas are always up-to-date with the primary.
+     - **High availability**: In case the primary database fails, the replica can be promoted to the primary without any data loss, because the replication was synchronous.
+   - **Cons**:
+     - **Performance impact**: Because the system must wait for the replica(s) to confirm the transaction before proceeding, it can add latency to the write operations, making it slower.
+     - **Higher resource usage**: Maintaining synchronization between the primary and replica requires more bandwidth and resources, which may affect performance.
+   - **Use cases**: Synchronous replication is ideal for use cases where data consistency and high availability are critical. For example, applications requiring strict consistency (e.g., financial systems) might use synchronous replication.
+
+#### Example in Amazon RDS:
+- **Multi-AZ deployments** in Amazon RDS use synchronous replication. In this setup, RDS automatically maintains a synchronous standby replica in a different availability zone. If the primary instance fails, RDS can automatically failover to the standby, with minimal downtime and no data loss.
+
+### 2. **Asynchronous Replication**:
+   - **Definition**: In **asynchronous replication**, the primary database commits a write operation to its local storage **without waiting for the replica to acknowledge** that the change has been replicated. The replica eventually receives the changes, but there is no guarantee that the replica will have the data at the same time as the primary.
+   - **How it works**: When a write operation occurs on the primary database, the system immediately acknowledges the transaction to the client without waiting for the replica to be updated. The primary sends the change to the replica, but the replica may apply the changes with a delay (depending on network conditions, load, and other factors).
+   - **Pros**:
+     - **Better performance**: Since the primary doesn’t have to wait for the replica to acknowledge the write, this can reduce latency and improve the performance of write-heavy workloads.
+     - **Scalability**: Asynchronous replication is more scalable because the primary doesn’t have to wait for confirmation from the replicas, which means the system can handle more replicas without causing a significant performance hit.
+   - **Cons**:
+     - **Eventual consistency**: There is a lag between when the primary database commits the transaction and when it is replicated to the replicas, meaning the replicas may be slightly out of sync. This means replicas could have **stale data** for a brief period of time.
+     - **Risk of data loss**: If the primary database fails before the changes are replicated to the replicas, there is a potential for **data loss**.
+   - **Use cases**: Asynchronous replication is suitable for applications where **data consistency** is not as critical or where **read scalability** is the main concern. For example, web applications with read-heavy workloads may benefit from asynchronous replication, where it's more important to have multiple replicas for load balancing than to ensure strict consistency between replicas.
+
+#### Example in Amazon RDS:
+- **Read Replicas** in Amazon RDS use asynchronous replication. When a write happens on the primary, the read replica(s) eventually receive the updates. The delay between when the primary is updated and when the replica catches up depends on factors like network latency, load, and the number of replicas.
+
+### Key Differences: Synchronous vs. Asynchronous Replication
+
+| Aspect                      | Synchronous Replication                         | Asynchronous Replication                         |
+|-----------------------------|-------------------------------------------------|--------------------------------------------------|
+| **Commit Acknowledgment**    | Waits for replica acknowledgment before committing. | Commits immediately, without waiting for replica acknowledgment. |
+| **Data Consistency**         | Ensures **strong consistency**; replicas are always up-to-date. | Ensures **eventual consistency**; replicas may lag behind. |
+| **Performance Impact**       | Can introduce latency due to waiting for replica. | Lower latency, better write performance. |
+| **Failure Handling**         | Provides **high availability** with no data loss (in case of failure). | Potential for **data loss** if the primary fails before replication completes. |
+| **Use Cases**                | Critical systems requiring strong consistency (e.g., financial systems). | Scalable read-heavy applications where eventual consistency is acceptable. |
+| **Amazon RDS Example**       | Multi-AZ deployment (synchronous between primary and standby). | Read replicas (asynchronous between primary and replica). |
+
+### Summary:
+- **Synchronous replication** is used when you need **strong consistency** and **high availability**, but it may introduce latency and impact performance.
+- **Asynchronous replication** is used for **scalability** and **performance** in read-heavy systems where **eventual consistency** is acceptable, but there is a risk of **data loss** in case of failure before replication completes.
+
+In the context of **Amazon RDS**:
+- **Multi-AZ deployments** use **synchronous replication** for high availability and fault tolerance.
+- **Read Replicas** use **asynchronous replication** to scale reads and distribute the load, where some replication lag is tolerated.
+
 ## RDS Multi AZ
 
 > *MultiAZ is a feature of RDS which provisions a standby replica which is kept in sync Synchronously with the primary instance.*
