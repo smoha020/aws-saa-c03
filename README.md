@@ -5319,20 +5319,20 @@ https://docs.aws.amazon.com/apigateway/latest/api/CommonErrors.html
 - Use Case: An offshore oil rig needs to process sensor data locally because it has limited internet access.
 ✅ Step-by-Step Process:
 - Deployment
- - AWS ships a Snowball Edge Compute Optimized device to the oil rig.
- - The IT team installs it in the server room on the rig.
+	- AWS ships a Snowball Edge Compute Optimized device to the oil rig.
+ 	- The IT team installs it in the server room on the rig.
 - Sensor Integration
- - The rig’s sensors stream data (temperature, pressure, vibration) into the Snowball device via local Ethernet.
+	- The rig’s sensors stream data (temperature, pressure, vibration) into the Snowball device via local Ethernet.
 - Local Processing
- - Custom Python scripts or AWS Lambda functions running on the device analyze sensor data in real-time.
- - If an anomaly is detected (e.g., overheating), an alert is generated instantly.
+	- Custom Python scripts or AWS Lambda functions running on the device analyze sensor data in real-time.
+	- If an anomaly is detected (e.g., overheating), an alert is generated instantly.
 - Data Storage
- - All raw and processed data is stored locally on the Snowball Edge.
+	- All raw and processed data is stored locally on the Snowball Edge.
 - Sync to AWS
- - When connectivity is available, processed summaries are synced to Amazon S3 via AWS DataSync.
- - Alternatively, the device is periodically shipped back to AWS, and bulk data is imported into S3.
+	- When connectivity is available, processed summaries are synced to Amazon S3 via AWS DataSync.
+	- Alternatively, the device is periodically shipped back to AWS, and bulk data is imported into S3.
 - Further Analysis
- - In the cloud, analysts use Amazon Athena and QuickSight to visualize the data and plan maintenance.
+	- In the cloud, analysts use Amazon Athena and QuickSight to visualize the data and plan maintenance.
 
 ### Snowmobile
 
