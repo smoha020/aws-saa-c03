@@ -3546,7 +3546,7 @@ Writes to replica after primary write is complete. ***Can*** be accessed for rea
 
 ### Aurora Storage Architecture
 
-- Replication happens at storage level
+- Replication happens at storage level (as opposed to???)
 - Primary is the only allowed to write to storage - other nodes can read
 - In case of damage or error, data is immediately repaired
 - More resilient than normal RDS
@@ -3557,10 +3557,10 @@ Writes to replica after primary write is complete. ***Can*** be accessed for rea
 
 - All SSD Based - **high IOPS, low latency**
 - Storage is billed based on **what’s used**
-- **High water mark** - billed for the most used
-    - Being changed
-- Storage which is freed up can be re-used
-- Replicas can be added and removed without requiring storage provisioning
+- **High water mark** - billed for the most used ???
+    - Being changed ???
+- Storage which is freed up can be re-used???
+- Replicas can be added and removed without requiring storage provisioning???
 - Multiple endpoints
 	- **Cluster Endpoint**
 		- **Description**: The **Cluster Endpoint** refers to the primary endpoint of an Aurora DB cluster. It points to the primary instance in the cluster, which handles both read and write requests. All applications that need to connect to the database for read-write operations should use the cluster endpoint.
