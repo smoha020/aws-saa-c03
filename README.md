@@ -3424,6 +3424,8 @@ In case of failure of the primary DB, the CNAME points to the standby DB
 > *Snapshots can be restored .. but create a new RDS instance*
 > 
 
+- What is the default RDS behavior with regards to backups and retention???
+
 ### RTO vs RPO
 
 **RTO: Recovery Time Objective**
@@ -3523,6 +3525,7 @@ Writes to replica after primary write is complete. ***Can*** be accessed for rea
 ### Amazon RDS IAM Authentication
 
 ![Untitled](img/Untitled%2097.png)
+- How is this implemented???
 
 ## Amazon Aurora Architecture
 
@@ -3537,8 +3540,8 @@ Writes to replica after primary write is complete. ***Can*** be accessed for rea
 - Aurora architecture is **VERY** different from RDS
     - Uses a **Cluster**
 - A single **primary** instance + 0 or more **replicas**
-    - Replicas can read and be standby
-- No local storage - uses **cluster volume**
+    - Replicas can read and be standby (at the same time???)
+- No local storage - uses **cluster volume** (More explanation???)
 - Faster provisioning and improved availability and performance
 
 ### Aurora Storage Architecture
